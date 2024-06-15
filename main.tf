@@ -1,5 +1,5 @@
 provider "aws" {
-  region = "ap-northeast-1c" # 適切なAWSリージョンを指定してください
+  region = "ap-northeast-1" # 適切なAWSリージョンを指定してください
 }
 
 data "aws_instance" "existing_instance" {
