@@ -22,7 +22,7 @@ resource "null_resource" "deploy" {
     connection {
       type        = "ssh"
       user        = "ubuntu" # SSHユーザー名
-      private_key = filebase64decode(var.ssh_private_key) # 秘密鍵を使用して認証します
+      private_key = var.ssh_private_key # 秘密鍵を使用して認証します
       host        = data.aws_instance.existing_instance.public_ip # インスタンスのパブリックIP
     }
   }
@@ -41,7 +41,7 @@ resource "null_resource" "deploy" {
     connection {
       type        = "ssh"
       user        = "ubuntu" # SSHユーザー名
-      private_key = filebase64decode(var.ssh_private_key) # 秘密鍵を使用して認証します
+      private_key = var.ssh_private_key # 秘密鍵を使用して認証します
       host        = data.aws_instance.existing_instance.public_ip # インスタンスのパブリックIP
     }
   }
