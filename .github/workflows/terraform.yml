@@ -47,10 +47,7 @@ jobs:
     # - name: Terraform Apply
     #   run: terraform apply -auto-approve -var "ssh_private_key=${{ secrets.SSH_PRIVATE_KEY }}" # Terraformの適用
     - name: Terraform Apply
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
-        chmod 600 private_key.pem
-        terraform apply -auto-approve -var "ssh_private_key=$(cat private_key.pem)"
+      run: terraform apply -auto-approve -var "ssh_private_key=${{ secrets.SSH_PRIVATE_KEY }}"
       env:
         TF_LOG: DEBUG
         TF_LOG_PATH: terraform.log
