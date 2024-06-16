@@ -29,7 +29,13 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} # GitHub SecretsからAWSアクセスキーIDを取得
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }} # GitHub SecretsからAWSシークレットアクセスキーを取得
         aws-region: ap-northeast-1 # AWSリージョンの指定
-
+    - name: Debug SSH Key
+      run: |
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+        ssh-keyscan 18.183.35.85 >> ~/.ssh/known_hosts
+        ssh -i private_key.pem ubuntu@18.183.35.85 hostname
+  
     - name: Terraform Init
       run: terraform init # Terraformの初期化
       env:
