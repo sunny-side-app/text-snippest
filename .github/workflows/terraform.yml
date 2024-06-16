@@ -33,8 +33,13 @@ jobs:
     - name: Terraform Init
       run: terraform init # Terraformの初期化
 
+    # - name: Terraform Apply
+    #   run: terraform apply -auto-approve -var "ssh_private_key=${{ secrets.SSH_PRIVATE_KEY }}" # Terraformの適用
     - name: Terraform Apply
-      run: terraform apply -auto-approve -var "ssh_private_key=${{ secrets.SSH_PRIVATE_KEY }}" # Terraformの適用
+      run: terraform apply -auto-approve -var "ssh_private_key=${{ secrets.SSH_PRIVATE_KEY }}" -input=false -parallelism=1 -refresh=true -lock=false -no-color -var-file="variables.tfvars"
+      env:
+        TF_LOG: DEBUG
+        TF_LOG_PATH: terraform.log
 
     - name: Terraform Plan
       if: github.event_name == 'pull_request'
