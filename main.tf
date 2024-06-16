@@ -34,7 +34,11 @@ resource "null_resource" "deploy" {
       "cd /home/ubuntu/text-snippest",       # 作成したディレクトリに移動
       "sudo chown -R ubuntu:ubuntu .",       # ディレクトリの所有権を変更
       "sudo chmod +x deploy.sh",             # スクリプトに実行権限を付与
-      "./deploy.sh"                          # デプロイスクリプトを実行
+      "./deploy.sh",                         # デプロイスクリプトを実行
+      "echo 'SSH Connection Test'",
+      "echo 'Hostname: $(hostname)'",
+      "echo 'Current Directory: $(pwd)'",
+      "ls -la /home/ubuntu/text-snippest"
     ]
 
     # SSH接続の設定
@@ -45,25 +49,6 @@ resource "null_resource" "deploy" {
       host        = data.aws_instance.existing_instance.public_ip # インスタンスのパブリックIP
       timeout     = "10m"
       agent       = false
-    }
-
-    # デバッグ用のコマンドを追加してSSH接続情報を表示
-    provisioner "remote-exec" {
-      inline = [
-        "echo 'SSH Connection Test'",
-        "echo 'Hostname: $(hostname)'",
-        "echo 'Current Directory: $(pwd)'",
-        "ls -la /home/ubuntu/text-snippest"
-      ]
-
-      connection {
-        type        = "ssh"
-        user        = "ubuntu"
-        private_key = var.ssh_private_key
-        host        = data.aws_instance.existing_instance.public_ip
-        timeout     = "10m"
-        agent       = false
-      }
     }
   }
 }
