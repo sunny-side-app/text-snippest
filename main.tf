@@ -43,6 +43,27 @@ resource "null_resource" "deploy" {
       user        = "ubuntu" # SSHユーザー名
       private_key = var.ssh_private_key # 秘密鍵を使用して認証します
       host        = data.aws_instance.existing_instance.public_ip # インスタンスのパブリックIP
+      timeout     = "10m"
+      agent       = false
+    }
+
+    # デバッグ用のコマンドを追加してSSH接続情報を表示
+    provisioner "remote-exec" {
+      inline = [
+        "echo 'SSH Connection Test'",
+        "echo 'Hostname: $(hostname)'",
+        "echo 'Current Directory: $(pwd)'",
+        "ls -la /home/ubuntu/text-snippest"
+      ]
+
+      connection {
+        type        = "ssh"
+        user        = "ubuntu"
+        private_key = var.ssh_private_key
+        host        = data.aws_instance.existing_instance.public_ip
+        timeout     = "10m"
+        agent       = false
+      }
     }
   }
 }
