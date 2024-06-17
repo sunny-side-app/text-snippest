@@ -17,6 +17,7 @@ abstract class AbstractSeeder implements Seeder {
         // PHPのfloatは実際にはdouble型の精度です。
         'float' => 'd',
         'string' => 's',
+        'text' => 's',
     ];
 
     public function __construct(MySQLWrapper $conn) {
@@ -45,6 +46,11 @@ abstract class AbstractSeeder implements Seeder {
             $columnName = $this->tableColumns[$i]['column_name'];
 
             if(!isset(static::AVAILABLE_TYPES[$columnDataType])) throw new \InvalidArgumentException(sprintf("The data type %s is not an available data type.", $columnDataType));
+
+            // `text` 型を `string` 型として扱う(MySQLの TEXT 型とPHPの string 型--Fakerで生成されるテキストのデフォルト--の間には直接のマッピングがないため)
+            if ($columnDataType === 'text') {
+                $columnDataType = 'string';
+            }
 
             // PHPは、値のデータタイプを返すget_debug_type()関数とgettype()関数の両方を提供しています。クラス名でも機能します。https://www.php.net/manual/en/function.get-debug-type.php を参照してください。
             // get_debug_typeはネイティブのPHP 8タイプを返します。例えば、floatsのgettype、gettype(4.5)は、ネイティブのデータタイプ'float'ではなく文字列'double'を返します。
