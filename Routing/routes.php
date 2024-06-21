@@ -19,18 +19,17 @@ return [
         global $DEBUG;
         try {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                if (!isset($_FILES['snippet'])) {
-                    throw new Exception('No file uploaded');
+                $snippetName = $_POST['snippet_name'] ?? '';
+                $programmingLanguage = $_POST['programming_language'] ?? '';
+                $validityPeriod = $_POST['validity_period'] ?? '';
+                $snippetContent = $_POST['snippet_content'] ?? '';
+
+                if (empty($snippetName) || empty($programmingLanguage) || empty($validityPeriod) || empty($snippetContent)) {
+                    throw new Exception('Missing required fields');
                 }
 
-                $file = $_FILES['snippet'];
-                $content = file_get_contents($file['tmp_name']);
-
-                // Monaco EditorのWebAPIを呼び出して構文ハイライト処理を行う
-                $highlightedContent = MonacoAPIHelper::highlightCode($content);
-
-                // 保存処理（仮定としてDatabaseHelperを利用）
-                $snippetId = DatabaseHelper::saveSnippet($highlightedContent);
+                // 保存処理
+                $snippetId = DatabaseHelper::saveSnippet($snippetName, $snippetContent, $validityPeriod, $programmingLanguage);
 
                 // 単票画面へのリダイレクト処理
                 header('Location: /snippets?id=' . $snippetId);
@@ -70,5 +69,8 @@ return [
             }
             return new JSONRenderer(['message' => $e->getMessage()]);
         }
+    },
+    'snippet-upload' => function(): HTTPRenderer {
+        return new HTMLRenderer('component/snippet-upload', []);
     },
 ];

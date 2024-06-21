@@ -4,6 +4,7 @@
             <h2>Snippets</h2>
             <p>Page: <?= htmlspecialchars($page) ?></p>
             <p>Items per Page: <?= htmlspecialchars($perPage) ?></p>
+            <a href="/snippet-upload" class="btn btn-primary">Upload Snippet</a>
         </div>
     </div>
     <div class="row">

@@ -9,6 +9,15 @@ use Exception;
 
 class DatabaseHelper
 {
+    public static function saveSnippet($snippetName, $snippetContent, $validityPeriod, $programmingLanguage): int {
+        $db = new MySQLWrapper();
+        $stmt = $db->prepare("INSERT INTO snippets (snippet_name, snippet, validity_period, programming_language) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param('ssss', $snippetName, $snippetContent, $validityPeriod, $programmingLanguage);
+        $stmt->execute();
+
+        return $db->insert_id; // 保存したスニペットのIDを返す
+    }
+    
     public static function getSnippetById(int $id): array{
         $db = new MySQLWrapper();
 
