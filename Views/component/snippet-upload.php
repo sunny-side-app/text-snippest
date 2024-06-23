@@ -1,59 +1,53 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.31.0/min/vs/loader.js"></script>
     <title>Upload Snippet</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-    <style>
-        #editor {
-            height: 400px;
-        }
-    </style>
+    <script>
+        require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.31.0/min/vs' }});
+        require(['vs/editor/editor.main'], function() {
+            window.editor = monaco.editor.create(document.getElementById('editor'), {
+                value: '',
+                language: 'plaintext'
+            });
+        });
+    </script>
 </head>
 <body>
 <div class="container mt-5">
     <h2>Upload Snippet</h2>
-    <form id="upload-form" action="/snippets" method="POST" enctype="multipart/form-data">
+    <form action="/snippets" method="post">
         <div class="mb-3">
-            <label for="snippet-name" class="form-label">Snippet Name</label>
-            <input type="text" class="form-control" id="snippet-name" name="snippet_name" required>
+            <label for="snippet_name" class="form-label">Snippet Name</label>
+            <input type="text" class="form-control" id="snippet_name" name="snippet_name" required>
         </div>
         <div class="mb-3">
-            <label for="programming-language" class="form-label">Programming Language</label>
-            <input type="text" class="form-control" id="programming-language" name="programming_language" required>
-        </div>
-        <div class="mb-3">
-            <label for="validity-period" class="form-label">Validity Period</label>
-            <select class="form-select" id="validity-period" name="validity_period" required>
-                <option value="10_minutes">10 minutes</option>
-                <option value="1_hour">1 hour</option>
-                <option value="1_day">1 day</option>
+            <label for="validity_period" class="form-label">Validity Period</label>
+            <select class="form-control" id="validity_period" name="validity_period" required>
+                <option value="10_minutes">10 Minutes</option>
+                <option value="1_hour">1 Hour</option>
+                <option value="1_day">1 Day</option>
                 <option value="permanent">Permanent</option>
             </select>
         </div>
         <div class="mb-3">
-            <label for="editor" class="form-label">Snippet</label>
-            <div id="editor"></div>
-            <textarea id="snippet-content" name="snippet_content" style="display: none;"></textarea>
+            <label for="programming_language" class="form-label">Programming Language</label>
+            <input type="text" class="form-control" id="programming_language" name="programming_language" required>
+        </div>
+        <div class="mb-3">
+            <label for="snippet_content" class="form-label">Snippet</label>
+            <div id="editor" style="height:300px;border:1px solid #ced4da;"></div>
+            <textarea name="snippet_content" id="snippet_content" style="display:none;"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Upload</button>
     </form>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.28.1/min/vs/loader.js"></script>
 <script>
-    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.28.1/min/vs' }});
-    require(['vs/editor/editor.main'], function() {
-        var editor = monaco.editor.create(document.getElementById('editor'), {
-            value: '',
-            language: 'javascript'
-        });
-
-        document.getElementById('upload-form').addEventListener('submit', function() {
-            var snippetContent = document.getElementById('snippet-content');
-            snippetContent.value = editor.getValue();
-        });
+    document.querySelector('form').addEventListener('submit', function() {
+        document.getElementById('snippet_content').value = window.editor.getValue();
     });
 </script>
 </body>

@@ -27,11 +27,13 @@
                             </p>
                             <p class="card-text">
                                 <strong>Validity Period:</strong> <?= htmlspecialchars($snippet['validity_period']) ?><br />
-                                <strong>URL:</strong> <?= htmlspecialchars($snippet['url']) ?><br />
+                                <strong>URL:</strong> <a href="/snippets/<?= htmlspecialchars($snippet['unique_string']) ?>"><?= htmlspecialchars($snippet['unique_string']) ?></a><br />
+                                
                             </p>
                             <p class="card-text"><small class="text-muted">Created at <?= htmlspecialchars($snippet['created_at']) ?></small></p>
                             <p class="card-text"><small class="text-muted">Updated at <?= htmlspecialchars($snippet['updated_at']) ?></small></p>
-                            <a href="/snippets?id=<?= htmlspecialchars($snippet['id']) ?>" class="card-link">View Details</a>
+                            <!-- <a href="/snippets?id=<?= htmlspecialchars($snippet['id']) ?>" class="card-link">View Details</a> -->
+                            <a href="/snippets/<?= htmlspecialchars($snippet['unique_string']) ?>" class="card-link">View Details</a>
                         </div>
                     </div>
                 </div>

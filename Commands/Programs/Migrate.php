@@ -90,6 +90,7 @@ class Migrate extends AbstractCommand
             include_once($filename);
 
             $migrationClass = $this->getClassnameFromMigrationFilename($filename);
+            $this->log("Processing up migration for " . $migrationClass); // デバッグ情報追加
             $migration = new $migrationClass();
             $this->log(sprintf("Processing up migration for %s", $migrationClass));
             $queries = $migration->up();
@@ -123,6 +124,7 @@ class Migrate extends AbstractCommand
 
         if ($result && $result->num_rows > 0) {
             $row = $result->fetch_assoc();
+            $this->log("Last migration: " . $row['filename']); // デバッグ情報追加
             return $row['filename'];
         }
 
@@ -136,6 +138,11 @@ class Migrate extends AbstractCommand
         // globはワイルドカード文字列を引数として渡すと、一致する"globbing pathnames"をすべて返すLinuxのシステムコールです。
         // これはワイルドカードに一致するすべてのファイルを意味します。詳細は https://man7.org/linux/man-pages/man7/glob.7.html を参照してください。
         $allFiles = glob($directory . "/*.php");
+
+        // デバッグ用にファイルリストを表示
+        foreach ($allFiles as $file) {
+            $this->log("Found migration file: " . $file);
+        }
 
         usort($allFiles, function ($a, $b) use ($order) {
             $compareResult = strcmp($a, $b);

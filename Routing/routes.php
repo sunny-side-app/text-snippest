@@ -23,42 +23,36 @@ return [
                 $programmingLanguage = $_POST['programming_language'] ?? '';
                 $validityPeriod = $_POST['validity_period'] ?? '';
                 $snippetContent = $_POST['snippet_content'] ?? '';
+                // $uniqueString = hash('md5', random_bytes(16)); // 一意の文字列を生成
 
                 if (empty($snippetName) || empty($programmingLanguage) || empty($validityPeriod) || empty($snippetContent)) {
                     throw new Exception('Missing required fields');
                 }
 
                 // 保存処理
-                $snippetId = DatabaseHelper::saveSnippet($snippetName, $snippetContent, $validityPeriod, $programmingLanguage);
+                $uniqueString = DatabaseHelper::saveSnippet([
+                    'snippet_name' => $snippetName,
+                    'snippet' => $snippetContent,
+                    'validity_period' => $validityPeriod,
+                    'programming_language' => $programmingLanguage,
+                    // 'unique_string' => $uniqueString,
+                ]);
+
+                error_log("Redirecting to: /snippets/" . $uniqueString);
 
                 // 単票画面へのリダイレクト処理
-                header('Location: /snippets?id=' . $snippetId);
+                header('Location: /snippets/' . $uniqueString);
                 exit;
             } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                if (isset($_GET['id'])) {
-                    $id = ValidationHelper::integer($_GET['id']);
+                $page = ValidationHelper::integer($_GET['page'] ?? 1);
+                $perPage = ValidationHelper::integer($_GET['perpage'] ?? 10);
 
-                    $snippet = DatabaseHelper::getSnippetById($id);
-                    return new HTMLRenderer('component/snippet-detail', ['snippet' => $snippet]);
-                } else {
-                    $page = $_GET['page'] ?? 1;
-                    $perPage = $_GET['perpage'] ?? 10;
-
-                    // デバッグ情報の追加
-                    if ($DEBUG) {
-                        echo "Page: $page, PerPage: $perPage<br>";
-                    }
-
-                    $page = ValidationHelper::integer($page);
-                    $perPage = ValidationHelper::integer($perPage);
-
-                    $snippets = DatabaseHelper::getSnippets($page, $perPage);
-                    return new HTMLRenderer('component/snippets-list', [
-                        'page' => $page,
-                        'perPage' => $perPage,
-                        'snippets' => $snippets,
-                    ]);
-                }
+                $snippets = DatabaseHelper::getSnippets($page, $perPage);
+                return new HTMLRenderer('component/snippets-list', [
+                    'page' => $page,
+                    'perPage' => $perPage,
+                    'snippets' => $snippets,
+                ]);         
             } else {
                 throw new Exception('Invalid request method');
             }
@@ -66,6 +60,23 @@ return [
             http_response_code(500);
             if ($DEBUG) {
                 echo 'Error: ' . $e->getMessage();
+                echo 'Stack Trace: ' . $e->getTraceAsString();
+            }
+            return new JSONRenderer(['message' => $e->getMessage()]);
+        }
+    },
+    'snippets/([^/]+)' => function($matches): HTTPRenderer {
+        global $DEBUG;
+        try {
+            $uniqueString = $matches[1];
+
+            $snippet = DatabaseHelper::getSnippetByUniqueString($uniqueString);
+            return new HTMLRenderer('component/snippet-detail', ['snippet' => $snippet]);
+        } catch (Exception $e) {
+            http_response_code(500);
+            if ($DEBUG) {
+                echo 'Error: ' . $e->getMessage();
+                echo 'Stack Trace: ' . $e->getTraceAsString();
             }
             return new JSONRenderer(['message' => $e->getMessage()]);
         }

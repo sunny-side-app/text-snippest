@@ -29,7 +29,7 @@ class TextSnippetsSeeder extends AbstractSeeder {
         ],
         [
             'data_type' => 'string',
-            'column_name' => 'url'
+            'column_name' => 'unique_string'
         ]
         // created_at と updated_at は、マイグレーションで定義されているように、MySQL の CURRENT_TIMESTAMP を使用し、シーディング時には必要ありません。
         // [
@@ -55,7 +55,7 @@ class TextSnippetsSeeder extends AbstractSeeder {
                 $faker->text(200), // snippet
                 $faker->randomElement($validityPeriods), // validity_period
                 $faker->randomElement($programmingLanguages), // programming_language
-                $faker->url // url
+                bin2hex(random_bytes(16)) // unique_string
                 // $faker->dateTimeThisYear->format('Y-m-d H:i:s'), // created_at
                 // $faker->dateTimeThisYear->format('Y-m-d H:i:s') // updated_at
             ];

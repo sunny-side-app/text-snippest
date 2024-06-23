@@ -2,6 +2,8 @@
     <div class="row mb-3">
         <div class="col">
             <h2>Snippet Details</h2>
+            <a href="/snippets" class="btn btn-primary">Back to Snippets List</a>
+            <a href="/snippet-upload" class="btn btn-primary">Upload New Snippet</a>
         </div>
     </div>
     <div class="row">
@@ -16,7 +18,7 @@
                     </p>
                     <p class="card-text">
                         <strong>Validity Period:</strong> <?= htmlspecialchars($snippet['validity_period']) ?><br />
-                        <strong>URL:</strong> <?= htmlspecialchars($snippet['url']) ?><br />
+                        <strong>URL:</strong> <a href="/snippets/<?= htmlspecialchars($snippet['unique_string']) ?>"><?= htmlspecialchars($snippet['unique_string']) ?></a><br />
                     </p>
                     <p class="card-text"><small class="text-muted">Created at <?= htmlspecialchars($snippet['created_at']) ?></small></p>
                     <p class="card-text"><small class="text-muted">Updated at <?= htmlspecialchars($snippet['updated_at']) ?></small></p>
