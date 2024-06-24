@@ -1,3 +1,13 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.31.0/min/vs/loader.js"></script>
+    <title>Snippet Details</title>
+</head>
+<body>
 <div class="container mt-3">
     <div class="row mb-3">
         <div class="col">
@@ -14,7 +24,7 @@
                     <h6 class="card-subtitle mb-2 text-muted"><?= htmlspecialchars($snippet['programming_language']) ?></h6>
                     <p class="card-text">
                         <strong>Snippet:</strong><br />
-                        <pre><?= htmlspecialchars($snippet['snippet']) ?></pre>
+                        <div id="editor" style="height:300px;border:1px solid #ced4da;"></div>
                     </p>
                     <p class="card-text">
                         <strong>Validity Period:</strong> <?= htmlspecialchars($snippet['validity_period']) ?><br />
@@ -27,3 +37,17 @@
         </div>
     </div>
 </div>
+<script>
+    require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.31.0/min/vs' }});
+    require(['vs/editor/editor.main'], function() {
+        monaco.editor.create(document.getElementById('editor'), {
+            value: <?= json_encode($snippet['snippet']) ?>,
+            language: '<?= htmlspecialchars($snippet['programming_language']) ?>',
+            theme: 'vs-dark',
+            readOnly: true
+        });
+    });
+</script>
+</body>
+</html>
+

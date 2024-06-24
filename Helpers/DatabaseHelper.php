@@ -88,5 +88,38 @@ class DatabaseHelper
         throw new Exception('Failed to generate a unique string after multiple attempts');
     }
 
+    // (一覧表示時に)スニペットの有効期限をチェックする
+    public static function checkAndUpdateSnippetExpiration(array &$snippet): void {
+        $currentTime = new \DateTime();
+        $createdAt = new \DateTime($snippet['created_at']);
+    
+        switch ($snippet['validity_period']) {
+            case '10_minutes':
+                $expirationTime = $createdAt->modify('+10 minutes');
+                break;
+            case '1_hour':
+                $expirationTime = $createdAt->modify('+1 hour');
+                break;
+            case '1_day':
+                $expirationTime = $createdAt->modify('+1 day');
+                break;
+            case 'permanent':
+                return; // 永続の場合は何もしない
+            default:
+                throw new \Exception('Invalid validity period');
+        }
+    
+        if ($currentTime > $expirationTime) {
+            // スニペットの内容を "Expired Snippet" に更新
+            $snippet['snippet'] = 'Expired Snippet';
+            // データベースを更新
+            $db = new MySQLWrapper();
+            $stmt = $db->prepare("UPDATE snippets SET snippet = ? WHERE id = ?");
+            $stmt->bind_param('si', $snippet['snippet'], $snippet['id']);
+            $stmt->execute();
+        }
+    }
+    
+
     // コメント: getSnippetById メソッドは現在使用されていませんが、将来的にIDベースのクエリが必要になる場合を考慮して残しています。
 }

@@ -11,7 +11,12 @@
         require(['vs/editor/editor.main'], function() {
             window.editor = monaco.editor.create(document.getElementById('editor'), {
                 value: '',
-                language: 'plaintext'
+                language: 'plaintext',
+                theme: 'vs-dark'
+            });
+
+            document.getElementById('programming_language').addEventListener('change', function() {
+                monaco.editor.setModelLanguage(window.editor.getModel(), this.value);
             });
         });
     </script>
@@ -35,7 +40,19 @@
         </div>
         <div class="mb-3">
             <label for="programming_language" class="form-label">Programming Language</label>
-            <input type="text" class="form-control" id="programming_language" name="programming_language" required>
+            <select class="form-select" id="programming_language" name="programming_language" required>
+                <option value="plaintext">Plain Text</option>
+                <option value="csharp">C#</option>
+                <option value="go">Go</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="kotlin">Kotlin</option>
+                <option value="php">PHP</option>
+                <option value="python">Python</option>
+                <option value="ruby">Ruby</option>
+                <option value="rust">Rust</option>
+                <option value="scala">Scala</option>
+            </select>
         </div>
         <div class="mb-3">
             <label for="snippet_content" class="form-label">Snippet</label>
