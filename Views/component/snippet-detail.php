@@ -41,7 +41,7 @@
     require.config({ paths: { 'vs': 'https://cdn.jsdelivr.net/npm/monaco-editor@0.31.0/min/vs' }});
     require(['vs/editor/editor.main'], function() {
         monaco.editor.create(document.getElementById('editor'), {
-            value: <?= json_encode($snippet['snippet']) ?>,
+            value: <?= json_encode(htmlspecialchars_decode($snippet['snippet'])) ?>,
             language: '<?= htmlspecialchars($snippet['programming_language']) ?>',
             theme: 'vs-dark',
             readOnly: true

@@ -48,10 +48,8 @@ return [
                 header('Location: /snippets/' . $uniqueString);
                 exit;
             } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-                // $page = ValidationHelper::integer($_GET['page'] ?? 1);
-                // $perPage = ValidationHelper::integer($_GET['perpage'] ?? 10);
-                $page = SanitizationAndValidationHelper::validateInteger($_GET['page']);
-                $perPage = SanitizationAndValidationHelper::validateInteger($_GET['perpage']);
+                $page = SanitizationAndValidationHelper::validateInteger($_GET['page'] ?? 1);
+                $perPage = SanitizationAndValidationHelper::validateInteger($_GET['perpage'] ?? 10);
 
                 $snippets = DatabaseHelper::getSnippets($page, $perPage);
 
