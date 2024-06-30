@@ -36,7 +36,8 @@ class HTMLRenderer implements HTTPRenderer
         // extract関数は、連想配列の各キーを変数として対応する各値をそれに代入する
         extract($this->data);
         require $viewPath;
-        return $this->getHeader() . ob_get_clean() . $this->getFooter();
+        $content = ob_get_clean();
+        return $this->getHeader() . $content . $this->getFooter();
     }
 
     private function getHeader(): string{

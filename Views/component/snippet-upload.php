@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/styles.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.31.0/min/vs/loader.js"></script>
     <title>Upload Snippet</title>
     <script>
@@ -26,11 +27,11 @@
     <h2>Upload Snippet</h2>
     <form action="/snippets" method="post">
         <div class="mb-3">
-            <label for="snippet_name" class="form-label">Snippet Name</label>
+            <label for="snippet_name" class="form-label"><strong>Snippet Name</strong></label>
             <input type="text" class="form-control" id="snippet_name" name="snippet_name" required>
         </div>
         <div class="mb-3">
-            <label for="validity_period" class="form-label">Validity Period</label>
+            <label for="validity_period" class="form-label"><strong>Validity Period</strong></label>
             <select class="form-control" id="validity_period" name="validity_period" required>
                 <option value="10_minutes">10 Minutes</option>
                 <option value="1_hour">1 Hour</option>
@@ -39,7 +40,7 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="programming_language" class="form-label">Programming Language</label>
+            <label for="programming_language" class="form-label"><strong>Programming Language</strong></label>
             <select class="form-select" id="programming_language" name="programming_language" required>
                 <option value="plaintext">Plain Text</option>
                 <option value="csharp">C#</option>
@@ -55,11 +56,13 @@
             </select>
         </div>
         <div class="mb-3">
-            <label for="snippet_content" class="form-label">Snippet</label>
+            <label for="snippet_content" class="form-label"><strong>Snippet</strong></label>
             <div id="editor" style="height:300px;border:1px solid #ced4da;"></div>
             <textarea name="snippet_content" id="snippet_content" style="display:none;"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Upload</button>
+        <div class='text-center mb-3'>
+            <button type="submit" class="btn btn-custom">Upload</button>
+        </div>
     </form>
 </div>
 <script>

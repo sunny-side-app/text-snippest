@@ -22,7 +22,9 @@ return [
                 $snippetName = SanitizationAndValidationHelper::sanitizeString($_POST['snippet_name'] ?? '');
                 $programmingLanguage = SanitizationAndValidationHelper::sanitizeString($_POST['programming_language'] ?? '');
                 $validityPeriod = SanitizationAndValidationHelper::sanitizeString($_POST['validity_period'] ?? '');
-                $snippetContent = SanitizationAndValidationHelper::sanitizeText($_POST['snippet_content'] ?? '');
+                // $snippetContent = SanitizationAndValidationHelper::sanitizeText($_POST['snippet_content'] ?? '');
+                $snippetContent = filter_var($_POST['snippet_content'] ?? '', FILTER_UNSAFE_RAW);
+
 
                 SanitizationAndValidationHelper::validateString($snippetName);
                 SanitizationAndValidationHelper::validateString($programmingLanguage);
@@ -52,6 +54,8 @@ return [
                 $perPage = SanitizationAndValidationHelper::validateInteger($_GET['perpage'] ?? 10);
 
                 $snippets = DatabaseHelper::getSnippets($page, $perPage);
+                $totalSnippets = DatabaseHelper::getTotalSnippetCount();
+                $totalPages = ceil($totalSnippets / $perPage);
 
                 // 一覧表示時にスニペットの有効期限をチェックする
                 foreach ($snippets as &$snippet) {
@@ -62,6 +66,7 @@ return [
                     'page' => $page,
                     'perPage' => $perPage,
                     'snippets' => $snippets,
+                    'totalPages' => $totalPages,
                 ]);         
             } else {
                 throw new Exception('Invalid request method');

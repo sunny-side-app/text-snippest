@@ -10,7 +10,8 @@ class SanitizationAndValidationHelper
     }
 
     public static function sanitizeText($text) {
-        return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+        // return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
+        return filter_var($text, FILTER_UNSAFE_RAW);
     }
 
     // 検証メソッド

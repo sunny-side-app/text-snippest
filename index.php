@@ -1,4 +1,10 @@
 <?php
+
+// 静的ファイルのリクエストはPHPスクリプトで処理せず、PHPビルトインサーバーのデフォルト動作に任せる
+if (preg_match('/\.(?:png|jpg|jpeg|gif|css|js)$/', $_SERVER["REQUEST_URI"])) {
+    return false;
+}
+
 // index はアプリケーションのエントリーポイント。初期設定を行った後、適切なルートコールバックを呼び出して Renderer を取得し、データをレンダリングして HTTP レスポンスとして返す作業を行う。
 spl_autoload_extensions(".php");
 spl_autoload_register();

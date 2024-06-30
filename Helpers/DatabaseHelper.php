@@ -53,6 +53,18 @@ class DatabaseHelper
         return $snippets; // 空のリストが返されることを許容
     }
 
+    public static function getTotalSnippetCount(): int {
+        $db = new MySQLWrapper();
+
+        $stmt = $db->prepare("SELECT COUNT(*) as count FROM snippets");
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+
+        return $row['count'];
+    }  
+
     public static function saveSnippet(array $snippetData): string {
         $db = new MySQLWrapper();
         $maxRetries = 5; // 最大試行回数
