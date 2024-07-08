@@ -13,7 +13,8 @@ $DEBUG = true;
 header("Access-Control-Allow-Origin: *");
 
 // ルートを読み込みます。
-$routes = include('Routing/routes.php');
+//$routes = include('Routing/routes.php');
+$routes = include(__DIR__ . '/../Routing/routes.php');
 
 // リクエストURIを解析してパスだけを取得します。
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

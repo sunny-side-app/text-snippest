@@ -1,3 +1,10 @@
+<?php
+// snippet-list.php
+
+error_log("Including snippet-list.php");
+
+?>
+
 <div class="container mt-3 mb-3">
     <div class="row mb-3">
         <div class="col">

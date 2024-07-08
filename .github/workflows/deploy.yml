@@ -30,3 +30,4 @@ jobs:
            echo 'DATABASE_USER=${{ secrets.DATABASE_USER }}' >> .env && \
            echo 'DATABASE_USER_PASSWORD=${{ secrets.DATABASE_USER_PASSWORD }}' >> .env
          "
+

@@ -4,7 +4,21 @@
 
 namespace Response\Render;
 
-require_once("Response/HTTPRenderer.php");
+// require_once("Response/HTTPRenderer.php");
+//require_once __DIR__ . '/../HTTPRenderer.php';
+//error_log("Trying to include: " . __DIR__ . '/../HTTPRenderer.php');
+//error_log("Trying to include: /home/ubuntu/text-snippest/Response/HTTPRenderer.php");
+//if (file_exists('/home/ubuntu/text-snippest/Response/HTTPRenderer.php')) {
+//    error_log("File exists: /home/ubuntu/text-snippest/Response/HTTPRenderer.php");
+//    require_once '/home/ubuntu/text-snippest/Response/HTTPRenderer.php';
+//} else {
+//    error_log("File does not exist: /home/ubuntu/text-snippest/Response/HTTPRenderer.php");
+//    throw new \Exception("File not found: /home/ubuntu/text-snippest/Response/HTTPRenderer.php");
+//}
+
+require_once '/home/ubuntu/text-snippest/Response/HTTPRenderer.php';
+error_log("Included HTTPRenderer.php successfully.");
+
 use Response\HTTPRenderer;
 
 class HTMLRenderer implements HTTPRenderer
@@ -25,11 +39,13 @@ class HTMLRenderer implements HTTPRenderer
 
     public function getContent(): string {
         $viewPath = $this->getViewPath($this->viewFile);
+	error_log("View file path: {$viewPath}");
 
         if (!file_exists($viewPath)) {
+	    error_log("View file {$viewPath} does not exist.");
             throw new \Exception("View file {$viewPath} does not exist.");
         }
-
+	error_log("Including view file: {$viewPath}");
         // ob_startはすべての出力をバッファに取り込みます。
         // このバッファはob_get_cleanによって取得することができ、バッファの内容を返し、バッファをクリアします。
         ob_start();
@@ -37,6 +53,7 @@ class HTMLRenderer implements HTTPRenderer
         extract($this->data);
         require $viewPath;
         $content = ob_get_clean();
+	error_log("Content generated from view file: {$viewPath}");
         return $this->getHeader() . $content . $this->getFooter();
     }
 
@@ -53,6 +70,9 @@ class HTMLRenderer implements HTTPRenderer
     }
 
     private function getViewPath(string $path): string{
-        return sprintf("%s/%s/Views/%s.php",__DIR__, '../..',$path);
+	$fullPath = sprintf("%s/%s/Views/%s.php", __DIR__, '../..', $path);
+    	error_log("Trying to include view file: " . $fullPath);  // 追加
+    	return $fullPath;
+        //return sprintf("%s/%s/Views/%s.php",__DIR__, '../..',$path);
     }
 }
